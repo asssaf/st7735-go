@@ -24,8 +24,9 @@ type BacklightCommand struct {
 
 func newBacklightCommand(actionName string, action bool) *BacklightCommand {
 	c := &BacklightCommand{
-		fs:     flag.NewFlagSet(actionName, flag.ExitOnError),
-		action: action,
+		fs:         flag.NewFlagSet(actionName, flag.ExitOnError),
+		action:     action,
+		actionName: actionName,
 	}
 
 	c.fs.StringVar(&c.spi, "spi", "", "SPI device (SPI0.1)")

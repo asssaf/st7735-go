@@ -14,6 +14,7 @@ import (
 
 const (
 	ST7735_SWRESET   = 0x01
+	ST7735_SLPIN     = 0x10
 	ST7735_SLPOUT    = 0x11
 	ST7735_FRMCTR1   = 0xB1
 	ST7735_FRMCTR2   = 0xB2
@@ -132,6 +133,10 @@ func (d *Dev) Init() error {
 	return d.sendBatch(init)
 }
 
+func (d *Dev) Powersave() error {
+	return d.sendCommand([]byte{ST7735_SLPIN})
+}
+
 func (d *Dev) SetBacklight(value bool) {
 	if d.backlight == nil {
 		return
@@ -193,6 +198,11 @@ func (d *Dev) Display(data []byte) error {
 	}
 
 	return d.sendData(data)
+}
+
+func (d *Dev) Halt() error {
+	d.SetBacklight(false)
+	return d.Powersave()
 }
 
 func (d *Dev) sendCommand(c []byte) error {
